@@ -1,0 +1,309 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "ZetScript",
+	"patterns": [{
+		"include": "#statements"
+	}],
+	"repository": {
+		"keywords": {
+			"patterns": [{
+				"name": "keyword.control",
+				"match": "\\b(import|new|delete|extends|if|else|while|for|case|default|switch|return|break|continue|this)\\b"
+			}]
+		},
+		"statements": {
+			"patterns": [{
+				"include": "#strings"
+			}, {
+				"include": "#comments"
+			}, {
+				"include": "#if-stat"
+			}, {
+				"include": "#keywords"
+			}, {
+				"include": "#constant"
+			}, {
+				"include": "#block"
+			}, {
+				"include": "#declaration"
+			}, {
+				"include": "#brace"
+			}, {
+				"include": "#function-call"
+			}, {
+				"include": "#numbers"
+			}, {
+				"match": ",",
+				"name": "punctuation.separator.delimiter"
+			}, {
+				"match": ";",
+				"name": "punctuation.terminator.java"
+			}]
+		},
+		"numbers": {
+			"patterns": [{
+				"match": "\\b((0(x|X)[0-9a-fA-F]([0-9a-fA-F']*[0-9a-fA-F])?)|([01]([01']*[01])b?)|(([0-9]([0-9']*[0-9])?\\.?[0-9]*([0-9']*[0-9])?)|(\\.[0-9]([0-9']*[0-9])?))((e|E)(\\+|-)?[0-9]([0-9']*[0-9])?)?)\\b",
+				"name": "constant.numeric.c"
+			}]
+		},
+		"function-call": {
+			"name": "meta.call",
+			"begin": "((?:\\w+)(?:\\.(?:\\w+))*)(\\()",
+			"beginCaptures": {
+				"1": {
+					"patterns": [{
+						"match": "\\w+(?!\\.)\\b",
+						"name": "entity.name.function"
+					}, {
+						"match": "\\b(?<!\\.)[A-Z]\\w+",
+						"name": "entity.name"
+					}]
+				},
+				"2": {
+					"name": "punctuation.definition.parameters.begin.bracket.round"
+				}
+			},
+			"end": "\\)",
+			"endCaptures": {
+				"0": {
+					"name": "punctuation.definition.parameters.end.bracket.round"
+				}
+			},
+			"patterns": [{
+				"include": "#statements"
+			}]
+		},
+		"constant": {
+			"patterns": [{
+				"name": "constant.language",
+				"match": "\\b(true|false)\\b"
+			}]
+		},
+		"declaration": {
+			"patterns": [{
+				"include": "#class-declaration"
+			}, {
+				"include": "#function-declaration"
+			}, {
+				"include": "#lambda-declaration"
+			}, {
+				"include": "#var-declaration"
+			}]
+		},
+		"var-declaration": {
+			"name": "meta.var",
+			"begin": "\\b(var|const)\\b\\s*(\\w*)\\s*",
+			"beginCaptures": {
+				"1": {
+					"name": "keyword.langauge"
+				},
+				"2": {
+					"name": "entity.name"
+				}
+			},
+			"patterns": [{
+				"include": "source.zetscript"
+			}]
+		},
+		"class-declaration": {
+			"name": "meta.class",
+			"begin": "\\b(class)\\b\\s*(\\w*)\\s*",
+			"beginCaptures": {
+				"1": {
+					"name": "keyword.language"
+				},
+				"2": {
+					"name": "entity.name.class.zetscriptscript"
+				}
+			},
+			"end": "(?<=\\})",
+			"patterns": [{
+				"include": "#class-block"
+			}]
+		},
+		"lambda-declaration": {
+			"name": "meta.function",
+			"begin": "\\b(function\\b)\\s*(\\[.*?\\])?(\\()(.*?)(\\))\\s*",
+			"beginCaptures": {
+				"1": {
+					"name": "keyword.language"
+				},
+				"3": {
+					"name": "punctuation.definition.parameters.begin.bracket.round"
+				},
+				"5": {
+					"name": "punctuation.definition.parameters.end.bracket.round"
+				},
+				"4": {
+					"patterns": [{
+						"begin": "(\\w+)\\s+",
+						"beginCaptures": {},
+						"end": "(\\w+)",
+						"endCaptures": {
+							"0": {
+								"name": "entity.name"
+							}
+						}
+					}, {
+						"match": "\\w+",
+						"name": "entity.name"
+					}]
+				}
+			},
+			"end": "(?<=\\})",
+			"patterns": [{
+				"include": "#block"
+			}]
+		},
+		"function-declaration": {
+			"name": "meta.proc",
+			"patterns": [{
+				"begin": "\\b(function\\b)\\s*(\\w*)\\s*(\\()[^\\)]*?(\\))(\\:.*?)?\\s*(?=\\n|{)",
+				"captures": {
+					"1": {
+						"name": "keyword.language"
+					},
+					"2": {
+						"name": "entity.name.function.zetscriptscript"
+					},
+					"3": {
+						"name": "punctuation.definition.parameters.begin.bracket.round"
+					},
+					"4": {
+						"name": "punctuation.definition.parameters.end.bracket.round"
+					}
+				},
+				"end": "(?<=\\})",
+				"patterns": [{
+					"include": "#block"
+				}]
+			}]
+		},
+		"strings": {
+			"patterns": [{
+					"begin": "\"",
+					"beginCaptures": {
+						"0": {
+							"name": "punctuation.definition.string.begin"
+						}
+					},
+					"end": "\"",
+					"endCaptures": {
+						"0": {
+							"name": "punctuation.definition.string.end"
+						}
+					},
+					"name": "string.quoted.double",
+					"patterns": [{
+						"match": "\\\\.",
+						"name": "constant.character.escape"
+					}, {
+						"begin": "\\${",
+						"beginCaptures": {
+							"0": {
+								"name": "constant.character.escape"
+							}
+						},
+						"end": "}",
+						"endCaptures": {
+							"0": {
+								"name": "constant.character.escape"
+							}
+						},
+						"patterns": [{
+							"include": "#statements"
+						}, {
+							"match": "\\w+",
+							"name": "entity.name"
+						}]
+					}]
+				},
+				{
+					"begin": "'",
+					"beginCaptures": {
+						"0": {
+							"name": "punctuation.definition.string.begin"
+						}
+					},
+					"end": "'",
+					"endCaptures": {
+						"0": {
+							"name": "punctuation.definition.string.end"
+						}
+					},
+					"name": "string.quoted.single",
+					"patterns": [{
+						"match": "\\\\.",
+						"name": "constant.character.escape"
+					}]
+				}
+			]
+		},
+		"comments": {
+			"name": "comment",
+			"patterns": [{
+				"begin": "(^[ \\t]+)?((//)(?:\\s*((@)internal)(?=\\s|$))?)",
+				"beginCaptures": {
+					"1": {
+						"name": "punctuation.whitespace.comment.leading"
+					},
+					"2": {
+						"name": "comment.line.double-slash"
+					},
+					"3": {
+						"name": "punctuation.definition.comment"
+					},
+					"4": {
+						"name": "storage.type.internaldeclaration"
+					},
+					"5": {
+						"name": "punctuation.decorator.internaldeclaration"
+					}
+				},
+				"end": "(?=^)",
+				"contentName": "comment.line.double-slash"
+			}, {
+				"name": "comment.block",
+				"begin": "/\\*",
+				"end": "\\*/"
+			}]
+		},
+		"block": {
+			"name": "meta.block",
+			"begin": "\\{",
+			"beginCaptures": {
+				"0": {
+					"name": "punctuation.section.parens.begin.bracket.round"
+				}
+			},
+			"end": "\\}",
+			"endCaptures": {
+				"0": {
+					"name": "punctuation.section.parens.end.bracket.round"
+				}
+			},
+			"patterns": [{
+				"include": "source.zetscript"
+			}]
+		},
+		"class-block": {
+			"name": "meta.block",
+			"begin": "\\{",
+			"beginCaptures": {
+				"0": {
+					"name": "punctuation.section.parens.begin.bracket.round"
+				}
+			},
+			"end": "\\}",
+			"endCaptures": {
+				"0": {
+					"name": "punctuation.section.parens.end.bracket.round"
+				}
+			},
+			"patterns": [{
+				"include": "source.zetscript"
+			}]
+		}
+	},
+	"scopeName": "source.zetscript"
+}

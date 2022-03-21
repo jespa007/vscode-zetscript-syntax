@@ -1,0 +1,30 @@
+{
+    "name": "zetscript-syntax",
+    "displayName": "ZetScript Syntax",
+    "description": "Syntax support for ZetScript (https://zetscript.org)",
+    "version": "0.0.1",
+    "publisher": "jespa007",
+    "engines": {
+        "vscode": "^1.65.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/jespa007/vscode-zetscript-syntax"
+    },
+    "contributes": {
+        "languages": [{
+            "id": "zetscript",
+            "aliases": ["ZetScript", "zetscript"],
+            "extensions": [".zs"],
+            "configuration": "./language-configuration.json"
+        }],
+        "grammars": [{
+            "language": "zetscript",
+            "scopeName": "source.zetscript",
+            "path": "./syntaxes/zetscript.tmLanguage.json"
+        }]
+    }
+}
