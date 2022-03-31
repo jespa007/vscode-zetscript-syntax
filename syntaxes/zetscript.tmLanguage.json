@@ -8,7 +8,7 @@
 		"keywords": {
 			"patterns": [{
 				"name": "keyword.control",
-				"match": "\\b(import|new|delete|extends|if|else|while|for|case|default|switch|return|break|continue|this)\\b"
+				"match": "\\b(new|delete|extends|if|else|while|for|case|default|switch|return|break|continue|this|import)\\b"
 			}]
 		},
 		"statements": {
@@ -38,6 +38,9 @@
 			}, {
 				"match": ";",
 				"name": "punctuation.terminator.java"
+			}, {
+				"match": "::",
+				"name": "punctuation.separator.function_member"
 			}]
 		},
 		"numbers": {
@@ -76,7 +79,7 @@
 		"constant": {
 			"patterns": [{
 				"name": "constant.language",
-				"match": "\\b(true|false)\\b"
+				"match": "\\b(true|false|null|undefined)\\b"
 			}]
 		},
 		"declaration": {
@@ -95,7 +98,7 @@
 			"begin": "\\b(var|const)\\b\\s*(\\w*)\\s*",
 			"beginCaptures": {
 				"1": {
-					"name": "keyword.langauge"
+					"name": "keyword.language"
 				},
 				"2": {
 					"name": "entity.name"

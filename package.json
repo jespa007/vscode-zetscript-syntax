@@ -2,7 +2,7 @@
     "name": "zetscript-syntax",
     "displayName": "ZetScript Syntax",
     "description": "Syntax support for ZetScript (https://zetscript.org)",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "publisher": "jespa007",
     "engines": {
         "vscode": "^1.65.0"
